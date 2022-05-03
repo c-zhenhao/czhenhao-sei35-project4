@@ -1,4 +1,3 @@
-from operator import truediv
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
@@ -57,7 +56,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     objects = UserAccountManager()
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["email", "first_name"]
+    REQUIRED_FIELDS = ["first_name"]
 
     def __str__(self):
         return f"{self.email}"
