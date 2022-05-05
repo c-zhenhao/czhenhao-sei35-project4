@@ -43,6 +43,12 @@ const theme = createTheme({
 
 export default function ProductCard({ productp }) {
   console.log(productp.id);
+  console.log(
+    `current stock: ${productp.stock}, total stock: ${
+      productp.stockStart
+    }, numbers for progressBar ${productp.stockStart - productp.stock}`
+  );
+
   return (
     <Grid item sm={12} md={12} lg={6} xl={3}>
       <ThemeProvider theme={theme}>
@@ -63,21 +69,29 @@ export default function ProductCard({ productp }) {
 
                 <Box>
                   <Typography variant="subtitle2" marginTop={0.5}>
-                    Progress: {(productp.stockStart / productp.stock) * 100}%
+                    Progress:{" "}
+                    {((productp.stockStart - productp.stock) /
+                      productp.stockStart) *
+                      100}
+                    %
                   </Typography>
                 </Box>
 
                 <Box sx={{ display: "flex" }}>
                   <ProgressBar
                     variant="determinate"
-                    value={(productp.stockStart / productp.stock) * 100}
+                    value={
+                      ((productp.stockStart - productp.stock) /
+                        productp.stockStart) *
+                      100
+                    }
                   />
                 </Box>
 
                 <Box sx={{ display: "flex" }}>
                   <Typography variant="h6" mt={1.5}>
                     ${productp.price}
-                    <Typography variant="h7">per unit</Typography>
+                    <Typography variant="h7"> per unit</Typography>
                   </Typography>
                 </Box>
 

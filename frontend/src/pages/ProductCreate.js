@@ -17,9 +17,10 @@ export default function ProfileEdit() {
   const [description, setDescription] = useState();
   const [imgUrl, setImgUrl] = useState();
   const [price, setPrice] = useState();
-  const [priceEnd, setPriceEnd] = useState();
+  // const [priceEnd, setPriceEnd] = useState();
   const [stock, setStock] = useState();
   const [stockStart, setStockStart] = useState();
+  const [dateEnd, setDateEnd] = useState();
 
   function handleNameChange(event) {
     console.log(event.target.value);
@@ -56,6 +57,11 @@ export default function ProfileEdit() {
     setStockStart(event.target.value);
   }
 
+  function handleDateEndChange(event) {
+    console.log(event.target.value);
+    setDateEnd(event.target.value);
+  }
+
   async function createProduct(productDetails) {
     const url = "http://127.0.0.1:8000/api/products/";
     const data = JSON.stringify(productDetails);
@@ -85,6 +91,7 @@ export default function ProfileEdit() {
       // priceEnd,
       stock: stock,
       stockStart: stockStart,
+      dateEnd: dateEnd,
     };
 
     console.log(productDetails);
@@ -204,6 +211,19 @@ export default function ProfileEdit() {
                     label="Starting Stock"
                     autoFocus
                     onChange={handleStockStartChange}
+                  />
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    name="dateEnd"
+                    variant="outlined"
+                    required
+                    fullWidth
+                    id="dateEnd"
+                    label="Ending Date"
+                    autoFocus
+                    onChange={handleDateEndChange}
                   />
                 </Grid>
               </Grid>

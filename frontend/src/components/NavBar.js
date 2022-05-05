@@ -134,7 +134,15 @@ export default function PrimarySearchAppBar() {
             )}
 
             <Box sx={{ flexGrow: 1 }} />
-            {currentUser?.is_seller && <Button>Add a product</Button>}
+            {currentUser?.is_seller && (
+              <Button
+                variant="outlined"
+                component={RouterLink}
+                to={`/product/create`}
+              >
+                Add a product
+              </Button>
+            )}
 
             <Box sx={{ display: { xs: "flex", md: "flex" } }}>
               {currentUser?.is_buyer && (

@@ -8,10 +8,10 @@ class Product(models.Model):
     imgUrl = models.TextField(max_length=1000, null=True)
     price = models.DecimalField(
         max_digits=6, decimal_places=2, validators=[MinValueValidator(0)])
-    priceEnd = models.DecimalField(
-        max_digits=6, decimal_places=2, validators=[MinValueValidator(0)])
-    priceCurrent = models.DecimalField(
-        max_digits=6, decimal_places=2, validators=[MinValueValidator(0)])
+    # priceEnd = models.DecimalField(
+    #    max_digits=6, decimal_places=2, validators=[MinValueValidator(0)])
+    # priceCurrent = models.DecimalField(
+    #    max_digits=6, decimal_places=2, validators=[MinValueValidator(0)])
     dateStart = models.DateTimeField(auto_now_add=True, null=True,)
     dateEnd = models.DateTimeField(blank=True, null=True)
     stock = models.IntegerField(default=0, validators=[MinValueValidator(0)])
