@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { AuthProvider } from "./context/AuthContext";
 
 import "./App.css";
 
+// public routes
 import PrimarySearchAppBar from "./components/NavBar";
 import Home from "./pages/Home";
 import ProductPage from "./pages/ProductPage";
+
+// private routes
 import Profile from "./pages/Profile";
 import ProfileEdit from "./pages/ProfileEdit";
 import Cart from "./pages/Cart";
@@ -31,16 +34,18 @@ function App() {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <PrimarySearchAppBar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/product/:id" element={<ProductPage />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/profile/edit" element={<ProfileEdit />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/orders" element={<Orders />} />
-          <Route path="/orders/:id" element={<OrderDetails />} />
-        </Routes>
+        <AuthProvider>
+          <PrimarySearchAppBar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/product/:id" element={<ProductPage />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile/edit" element={<ProfileEdit />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/orders" element={<Orders />} />
+            <Route path="/orders/:id" element={<OrderDetails />} />
+          </Routes>
+        </AuthProvider>
       </ThemeProvider>
     </>
   );

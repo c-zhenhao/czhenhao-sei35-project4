@@ -64,20 +64,19 @@ class OrderDetailsAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# API to get the products id of inside the order id
+# API to get the order details
 class OrderDetailsItemAPIView(APIView):
 
-    # 1. get order items
+    # 1. function to get the orderitem from db
     def get_orderitems(self, orderId):
         try:
-            return OrderItem.objects.get(order_id=orderId)
+            return OrderItem.objects.filter(order_id=orderId)
         except OrderItem.DoesNotExist:
             raise Http404
 
-    # 2. get the items
+    # 2. ENDPOINT to get the order items inside the order id
     def get(self, request, orderId):
         orderitems = self.get_orderitems(orderId)
-        print(f"this is order items: {orderitems}")
         serializer = OrderItemSerializer(orderitems, many=True)
         return Response(serializer.data)
 

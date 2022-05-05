@@ -1,6 +1,8 @@
 import * as React from "react";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useContext } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+
+import AuthContext from "../../context/AuthContext";
 
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
@@ -12,7 +14,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
-import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
@@ -21,37 +22,49 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function FormDialog(props) {
+  let { loginUser } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const location = useLocation();
+
   // login states
-  const [loginEmail, setLoginEmail] = useState();
-  const [loginPassword, setLoginPassword] = useState();
-  const [loginConfirmPassword, setLoginConfirmPassword] = useState();
+  const [email, setLoginEmail] = useState();
+  const [password, setLoginPassword] = useState();
+  const [confirmPassword, setConfirmPassword] = useState();
 
   function handleLoginEmail(event) {
     console.log(event.target.value);
     setLoginEmail(event.target.value);
   }
+
   function handleLoginPassword(event) {
     console.log(event.target.value);
     setLoginPassword(event.target.value);
   }
-  function handleConfirmLoginPassword(event) {
+
+  function handleConfirmPassword(event) {
     console.log(event.target.value);
-    setLoginConfirmPassword(event.target.value);
+    setConfirmPassword(event.target.value);
   }
-
-  // redirect back after api call
-  const navigate = useNavigate();
-
-  // api call to authenticate
 
   const handleClose = () => {
     props.setOpenLogIn(false);
   };
 
+  function handleLoginClick(event) {
+    // check if password = confirmPassword
+    if (confirmPassword !== password) {
+      alert("passwords do not match");
+    } else {
+      const loginDetails = { email, password };
+      loginUser(loginDetails);
+      handleClose();
+    }
+  }
+
   return (
     <Dialog
       open={props.openLogIn}
-      onClose={handleClose}
+      onClose={() => {}}
       TransitionComponent={Transition}
     >
       <DialogContent>
@@ -117,36 +130,20 @@ export default function FormDialog(props) {
                     label="Confirm Password"
                     type="password"
                     id="confirm-password"
-                    onChange={handleConfirmLoginPassword}
+                    onChange={handleConfirmPassword}
                   />
                 </Grid>
               </Grid>
 
               <Button
-                type="submit"
                 fullWidth
                 variant="contained"
                 color="primary"
                 sx={{ mt: 3, mx: 0, mb: 2 }}
+                onClick={handleLoginClick}
               >
                 Login
               </Button>
-
-              <Grid container justifyContent="flex-end">
-                <Grid item>
-                  <Link
-                    variant="body2"
-                    underline="hover"
-                    style={{ cursor: "pointer" }}
-                    onClick={() => {
-                      handleClose();
-                      alert("please contact the admin... TBD stretch goal");
-                    }}
-                  >
-                    Forgot password?
-                  </Link>
-                </Grid>
-              </Grid>
             </Box>
           </Box>
         </Container>

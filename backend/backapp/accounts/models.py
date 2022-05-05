@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseU
 
 
 class UserAccountManager(BaseUserManager):
-    def create_user(self, email, password=None):
+    def create_user(self, email, password=None, **kwargs):
         if not email:
             raise ValueError("User must have an email")
         if not password:
@@ -11,18 +11,15 @@ class UserAccountManager(BaseUserManager):
 
         user = self.model(email=self.normalize_email(email))
 
+        if kwargs["first_name"]:
+            user.first_name = kwargs["first_name"]
+
+        if kwargs["last_name"]:
+            user.last_name = kwargs["last_name"]
+
         user.set_password(password)
         user.is_buyer = True
         user.is_seller = False
-        user.save(using=self._db)
-
-        return user
-
-    def create_seller(self, email, password=None):
-        user = self.create_user(email, password)
-
-        user.is_buyer = False
-        user.is_seller = True
         user.save(using=self._db)
 
         return user

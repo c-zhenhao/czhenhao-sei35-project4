@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
@@ -13,12 +14,21 @@ import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import axios from "axios";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 export default function SignUp(props) {
+  const navigate = useNavigate();
+
+  const [first_name, setFirstName] = useState();
+  const [last_name, setLastName] = useState();
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const [confirmPassword, setConfirmPassword] = useState();
+
   const handleClose = () => {
     props.setOpenSignUp(false);
   };
@@ -27,6 +37,60 @@ export default function SignUp(props) {
     handleClose();
     props.setOpenLogIn(true);
   };
+
+  function handleFirstNameChange(event) {
+    console.log(event.target.value);
+    setFirstName(event.target.value);
+  }
+
+  function handleLastNameChange(event) {
+    console.log(event.target.value);
+    setLastName(event.target.value);
+  }
+
+  function handleEmailChange(event) {
+    console.log(event.target.value);
+    setEmail(event.target.value);
+  }
+
+  function handlePasswordChange(event) {
+    console.log(event.target.value);
+    setPassword(event.target.value);
+  }
+
+  function handleConfirmPasswordChange(event) {
+    console.log(event.target.value);
+    setConfirmPassword(event.target.value);
+  }
+
+  async function signupUser(loginDetails) {
+    const url = "http://127.0.0.1:8000/api/accounts/signup/";
+    const data = JSON.stringify(loginDetails);
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const response = await axios.post(url, data, config);
+
+    if (response.status === 201) {
+      console.log(response.data);
+    } else {
+      alert("signup failed");
+    }
+  }
+
+  function handleSubmit(event) {
+    console.log(event);
+    if (confirmPassword !== password) {
+      alert("passwords do not match");
+    } else {
+      const loginDetails = { first_name, last_name, email, password };
+      signupUser(loginDetails);
+      handleClose();
+    }
+  }
 
   return (
     <Dialog
@@ -73,6 +137,7 @@ export default function SignUp(props) {
                     id="firstName"
                     label="First Name"
                     autoFocus
+                    onChange={handleFirstNameChange}
                   />
                 </Grid>
 
@@ -84,6 +149,7 @@ export default function SignUp(props) {
                     id="lastName"
                     label="Last Name"
                     name="lastName"
+                    onChange={handleLastNameChange}
                   />
                 </Grid>
 
@@ -95,6 +161,7 @@ export default function SignUp(props) {
                     id="email"
                     label="Email Address"
                     name="email"
+                    onChange={handleEmailChange}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -106,6 +173,7 @@ export default function SignUp(props) {
                     label="Password (min x characters)"
                     type="password"
                     id="password"
+                    onChange={handlePasswordChange}
                   />
                 </Grid>
 
@@ -118,16 +186,17 @@ export default function SignUp(props) {
                     label="Confirm Password"
                     type="password"
                     id="confirm-password"
+                    onChange={handleConfirmPasswordChange}
                   />
                 </Grid>
               </Grid>
 
               <Button
-                type="submit"
                 fullWidth
                 variant="contained"
                 color="primary"
                 sx={{ mt: 3, mx: 0, mb: 2 }}
+                onClick={handleSubmit}
               >
                 Sign Up
               </Button>

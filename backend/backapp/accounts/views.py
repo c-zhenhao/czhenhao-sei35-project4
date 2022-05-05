@@ -10,6 +10,8 @@ from .serializers import UserAccountSerializer, TokenSerializer
 
 # JWT settings
 # https://medium.com/django-rest/logout-django-rest-framework-eb1b53ac6d35
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.token_blacklist.models import OutstandingToken, BlacklistedToken
 
@@ -37,7 +39,7 @@ class LoginView(generics.ListCreateAPIView):
             refresh = RefreshToken.for_user(user)
             serializer = TokenSerializer(data={
                 # using DRF JWT utility functions to generate a token
-                "token": str(refresh.access_token)
+                "token": str(refresh.access_token),
             })
             serializer.is_valid()
             return Response(serializer.data)
@@ -58,7 +60,7 @@ class SignupView(generics.ListCreateAPIView):
         if not email or not password:
             return Response(data={"message": "email and password is required to register a user"}, status=status.HTTP_400_BAD_REQUEST)
         new_user = UserAccount.objects.create_user(
-            email=email, password=password
+            **request.data
         )
         return Response(status=status.HTTP_201_CREATED)
 
@@ -96,3 +98,22 @@ class UserAllAPIView(APIView):
         users = UserAccount.objects.all()
         serializer = UserAccountSerializer(users, many=True)
         return Response(serializer.data)
+
+
+# login with custom token
+# # Insert info in payload: username, token, that shows in API call
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token['first_name'] = user.first_name
+        token['last_name'] = user.last_name
+        token['email'] = user.email
+        token['is_buyer'] = user.is_buyer
+        token['is_seller'] = user.is_seller
+        return token
+
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer

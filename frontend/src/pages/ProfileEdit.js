@@ -11,7 +11,7 @@ import {
   TextField,
 } from "@mui/material";
 
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import PersonIcon from "@mui/icons-material/Person";
 
 export default function ProfileEdit() {
   const navigate = useNavigate();
@@ -42,9 +42,11 @@ export default function ProfileEdit() {
               sx={{
                 m: 1,
                 bgcolor: "secondary.main",
+                width: 69,
+                height: 69,
               }}
             >
-              <LockOutlinedIcon />
+              <PersonIcon sx={{ fontSize: 50 }} />
             </Avatar>
 
             <Box
@@ -88,17 +90,6 @@ export default function ProfileEdit() {
                     id="email"
                     label="Email Address"
                     name="email"
-                  />
-                </Grid>
-
-                <Grid item xs={12}>
-                  <TextField
-                    variant="outlined"
-                    required
-                    fullWidth
-                    id="address"
-                    label="Address"
-                    name="address"
                   />
                 </Grid>
 
