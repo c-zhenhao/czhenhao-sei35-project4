@@ -55,6 +55,7 @@ class OrderDetailsAPIView(APIView):
         return Response(serializer.data)
 
     # 3. update the specific order
+    # delete this?
     def patch(self, request, orderId):
         order = self.get_order(orderId)
         serializer = OrderSerializer(order, request.data)

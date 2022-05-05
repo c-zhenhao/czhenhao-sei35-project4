@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+
+import axios from "axios";
 
 import { Container, Typography, Button, Link } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
@@ -145,6 +147,30 @@ const order_status_types = [
 ];
 
 export default function Orders() {
+  const [orders, setOrders] = useState([]);
+  const [isNotLoading, setIsNotLoading] = useState(false);
+
+  useEffect(() => {
+    getOrders();
+  }, [isNotLoading]);
+
+  async function getOrders() {
+    const url = "http://127.0.0.1:8000/api/orders/";
+
+    const response = await axios.get(url);
+    console.log(response);
+
+    if (response.status === 200) {
+      console.log(response.data);
+      console.log(typeof response.data);
+      setOrders(response.data);
+
+      setIsNotLoading(true);
+    } else {
+      alert("failed to get orders");
+    }
+  }
+
   return (
     <Container>
       <Typography variant="h4" sx={{ mb: 3 }}>
@@ -154,7 +180,7 @@ export default function Orders() {
       <div style={{ width: "100%" }}>
         <DataGrid
           autoHeight
-          rows={rows}
+          rows={orders}
           columns={columns}
           pageSize={10}
           rowsPerPageOptions={[10]}

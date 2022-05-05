@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+
+import AuthContext from "../context/AuthContext";
 
 import {
   Typography,
@@ -14,7 +16,40 @@ import {
 import PersonIcon from "@mui/icons-material/Person";
 
 export default function ProfileEdit() {
+  let { currentUser } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  // profile inputs
+  const [first_name, setFirstName] = useState(currentUser.first_name);
+  const [last_name, setLastName] = useState(currentUser.last_name);
+  const [email, setEmail] = useState(currentUser.email);
+  const [password, setPassword] = useState();
+  const [confirmPassword, setConfirmPassword] = useState();
+
+  function handleFirstNameChange(event) {
+    console.log(event.target.value);
+    setFirstName(event.target.value);
+  }
+
+  function handleLastNameChange(event) {
+    console.log(event.target.value);
+    setLastName(event.target.value);
+  }
+
+  function handleEmailChange(event) {
+    console.log(event.target.value);
+    setEmail(event.target.value);
+  }
+
+  function handlePasswordChange(event) {
+    console.log(event.target.value);
+    setPassword(event.target.value);
+  }
+
+  function handleConfirmPasswordChange(event) {
+    console.log(event.target.value);
+    setConfirmPassword(event.target.value);
+  }
 
   function handleSubmit() {
     // authenticate password
@@ -68,6 +103,9 @@ export default function ProfileEdit() {
                     id="firstName"
                     label="First Name"
                     autoFocus
+                    placeholder={first_name}
+                    defaultValue={first_name}
+                    onChange={handleFirstNameChange}
                   />
                 </Grid>
 
@@ -79,6 +117,9 @@ export default function ProfileEdit() {
                     id="lastName"
                     label="Last Name"
                     name="lastName"
+                    placeholder={last_name}
+                    defaultValue={last_name}
+                    onChange={handleLastNameChange}
                   />
                 </Grid>
 
@@ -90,7 +131,14 @@ export default function ProfileEdit() {
                     id="email"
                     label="Email Address"
                     name="email"
+                    placeholder={email}
+                    defaultValue={email}
+                    onChange={handleEmailChange}
                   />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Typography>please retype your password</Typography>
                 </Grid>
 
                 <Grid item xs={12}>
@@ -102,6 +150,7 @@ export default function ProfileEdit() {
                     label="Password (min x characters)"
                     type="password"
                     id="password"
+                    onChange={handlePasswordChange}
                   />
                 </Grid>
 
@@ -114,12 +163,12 @@ export default function ProfileEdit() {
                     label="Confirm Password"
                     type="password"
                     id="confirm-password"
+                    onChange={handleConfirmPasswordChange}
                   />
                 </Grid>
               </Grid>
 
               <Button
-                type="submit"
                 fullWidth
                 variant="contained"
                 color="primary"

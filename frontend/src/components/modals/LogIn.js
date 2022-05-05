@@ -64,7 +64,7 @@ export default function FormDialog(props) {
   return (
     <Dialog
       open={props.openLogIn}
-      onClose={() => {}}
+      onClose={handleClose}
       TransitionComponent={Transition}
     >
       <DialogContent>

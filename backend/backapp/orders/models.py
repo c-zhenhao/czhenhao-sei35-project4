@@ -6,7 +6,8 @@ from products.models import Product
 
 
 class Order(models.Model):
-    user = models.ForeignKey(UserAccount, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(
+        UserAccount, on_delete=models.SET_NULL, null=True)
     order_status = models.CharField(max_length=20, default="PENDING", choices=[("PENDING", "Pending"), ("PROCESSING", "Processing"), (
         "INTRANSIT", "In Transit"), ("WAITING", "Waiting Collection"), ("COMPLETED", "Completed"), ("CANCELLED", "Cancelled")])
     order_created_time = models.DateTimeField(auto_now_add=True)

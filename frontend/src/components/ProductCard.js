@@ -1,14 +1,18 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
+import {
+  Grid,
+  Card,
+  CardActionArea,
+  CardMedia,
+  CardContent,
+  Box,
+  Typography,
+  CardActions,
+} from "@mui/material";
 import { AccessTime } from "@mui/icons-material";
 import { createTheme, ThemeProvider } from "@mui/material";
-import Card from "@mui/material/Card";
-import { CardActionArea } from "@mui/material";
 
 import ProgressBar from "./ProgressBar";
 
@@ -37,57 +41,67 @@ const theme = createTheme({
   },
 });
 
-export default function ProductCard({ product }) {
+export default function ProductCard({ productp }) {
+  console.log(productp.id);
   return (
-    <Grid item xs={3}>
+    <Grid item sm={12} md={12} lg={6} xl={3}>
       <ThemeProvider theme={theme}>
-        <CardActionArea component={NavLink} to={`/product/${product.id}`}>
-          <Card>
-            <Paper elevation={1}>
-              <img className="img" src={product.imgUrl} alt={product.name} />
+        <Card sx={{ minHeight: 400 }}>
+          <CardActionArea component={NavLink} to={`/product/${productp.id}`}>
+            <CardMedia
+              component="img"
+              height="200"
+              image={productp.imgUrl}
+              alt={productp.name}
+            />
 
-              <Box paddingX={1}>
-                <Typography variant="subtitle" component="h2">
-                  {product.name}
+            <CardContent>
+              <Box paddingX={0.5}>
+                <Typography variant="h6" noWrap={true}>
+                  {productp.name}
                 </Typography>
 
                 <Box>
-                  <Typography variant="body2" component="p" marginTop={0}>
-                    Progress:{" "}
-                    {product.priceCurrent.toLocaleString("en-us", {
-                      style: "currency",
-                      currency: "sgd",
-                    })}{" "}
-                    of{" "}
-                    {product.priceEnd.toLocaleString("en-us", {
-                      style: "currency",
-                      currency: "sgd",
-                    })}
+                  <Typography variant="subtitle2" marginTop={0.5}>
+                    Progress: {(productp.stockStart / productp.stock) * 100}%
                   </Typography>
                 </Box>
 
                 <Box sx={{ display: "flex" }}>
-                  <ProgressBar variant="determinate" value={100} />
+                  <ProgressBar
+                    variant="determinate"
+                    value={(productp.stockStart / productp.stock) * 100}
+                  />
                 </Box>
 
                 <Box sx={{ display: "flex" }}>
-                  <Typography variant="h6" component="h3" marginTop={0}>
-                    ${product.price.toFixed(2)} per unit
+                  <Typography variant="h6" mt={1.5}>
+                    ${productp.price}
+                    <Typography variant="h7">per unit</Typography>
                   </Typography>
                 </Box>
 
-                <Box sx={{ display: "flex", alignItems: "center" }}>
+                <CardActions
+                  sx={{
+                    display: "flex",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                  }}
+                >
                   <Typography variant="body2" component="p">
                     <AccessTime
-                      sx={{ width: "0.5em", marginRight: "0.5rem" }}
+                      sx={{
+                        width: "0.5em",
+                        marginRight: "0.5rem",
+                      }}
                     />
-                    ENDS ON {product.dateEnd}
+                    ENDS IN {productp.dateEnd}
                   </Typography>
-                </Box>
+                </CardActions>
               </Box>
-            </Paper>
-          </Card>
-        </CardActionArea>
+            </CardContent>
+          </CardActionArea>
+        </Card>
       </ThemeProvider>
     </Grid>
   );

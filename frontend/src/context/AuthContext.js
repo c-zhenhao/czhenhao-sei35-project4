@@ -8,14 +8,14 @@ import jwt_decode from "jwt-decode";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  // global authtoken state
+  // authtoken state
   const [authToken, setAuthToken] = useState(() =>
     localStorage.getItem("authTokens")
       ? JSON.parse(localStorage.getItem("authToken"))
       : null
   );
 
-  // global current user state
+  // current user state
   const [currentUser, setCurrentUser] = useState(() =>
     localStorage.getItem("authToken")
       ? jwt_decode(localStorage.getItem("authToken"))

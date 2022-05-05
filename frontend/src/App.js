@@ -15,6 +15,8 @@ import ProfileEdit from "./pages/ProfileEdit";
 import Cart from "./pages/Cart";
 import Orders from "./pages/Orders";
 import OrderDetails from "./pages/OrderDetails";
+import OrderAdmin from "./pages/OrderAdmin";
+import ProductCreate from "./pages/ProductCreate";
 
 import { createTheme, ThemeProvider } from "@mui/material";
 
@@ -44,6 +46,8 @@ function App() {
             <Route path="/cart" element={<Cart />} />
             <Route path="/orders" element={<Orders />} />
             <Route path="/orders/:id" element={<OrderDetails />} />
+            <Route path="/orders/admin" element={<OrderAdmin />} />
+            <Route path="/product/create" element={<ProductCreate />} />
           </Routes>
         </AuthProvider>
       </ThemeProvider>

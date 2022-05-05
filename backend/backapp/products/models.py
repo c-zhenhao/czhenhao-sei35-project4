@@ -15,6 +15,8 @@ class Product(models.Model):
     dateStart = models.DateTimeField(auto_now_add=True, null=True,)
     dateEnd = models.DateTimeField(blank=True, null=True)
     stock = models.IntegerField(default=0, validators=[MinValueValidator(0)])
+    stockStart = models.IntegerField(
+        default=0, validators=[MinValueValidator(0)])
     stockStatus = models.CharField(max_length=10, default="INSTOCK", choices=[
         ("INSTOCK", "In stock"), ("OOS", "Out of stock")])
     isActive = models.BooleanField(default=True)
