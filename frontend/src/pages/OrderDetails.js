@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+
+import axios from "axios";
 
 import { Container, Typography, Avatar } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
@@ -134,37 +136,86 @@ const rows = [
 
 export default function OrderDetails() {
   let { id } = useParams();
+  console.log(id);
+  const [isNotLoading, setIsNotLoading] = useState(false);
+  const [orderFirstName, setOrderFirstName] = useState();
+  const [orderLastName, setOrderLastName] = useState();
+  const [orderEmail, setOrderEmail] = useState();
+  const [orderStatus, setOrderStatus] = useState();
+  const [orderCreatedTime, setOrderCreatedTime] = useState();
+  const [orderUpdatedTime, setOrderUpdatedTime] = useState();
+
+  useEffect(() => {
+    getOrders();
+  }, [isNotLoading]);
+
+  async function getOrders() {
+    const url = `http://127.0.0.1:8000/api/orders/${id}`;
+
+    const response = await axios.get(url);
+    console.log(response);
+
+    if (response.status === 200) {
+      console.log(response.data);
+
+      // order details
+      const fetchedData = response.data;
+      console.log(fetchedData.order_status);
+      setOrderStatus(fetchedData.order_status);
+      setOrderCreatedTime(fetchedData.order_created_time);
+      setOrderUpdatedTime(fetchedData.order_updated_time);
+
+      // get user details
+      const orderUserId = fetchedData.user;
+
+      const orderUserData = await axios.get(
+        `http://127.0.0.1:8000/api/accounts/userid/${orderUserId}`
+      );
+      console.log(orderUserData.data);
+      let oud = orderUserData.data;
+      console.log(oud);
+
+      // update states with info to use below
+      setOrderFirstName(oud.first_name);
+      setOrderLastName(oud.last_name);
+      setOrderEmail(oud.email);
+
+      setIsNotLoading(true);
+    } else {
+      alert("failed to get orders");
+    }
+  }
 
   return (
     <Container>
       <Typography variant="h4" sx={{ mb: 3 }}>
-        Order ID: {id} details
+        Order details for Order ID: <strong>{id}</strong>
       </Typography>
 
       <Typography variant="h6" sx={{ mb: 3 }}>
-        Customer name: firstName, lastName
+        Customer name: {orderFirstName}, {orderLastName}
       </Typography>
 
       <Typography variant="h6" sx={{ mb: 3 }}>
-        Customer email: email@email.com
+        Customer email: {orderEmail}
       </Typography>
 
       <Typography variant="h6" sx={{ mb: 3 }}>
-        Order Status: pending
+        Order Status: {orderStatus}
       </Typography>
 
       <Typography variant="h6" sx={{ mb: 3 }}>
-        Order Created Time: 2022-05-01 01:45:02.937971+08
+        Order Created Time: {orderCreatedTime}
       </Typography>
 
       <Typography variant="h6" sx={{ mb: 3 }}>
-        Order Updated Time: 2022-05-01 01:45:02.937971+08
+        Order Updated Time: {orderUpdatedTime}
       </Typography>
 
       <div style={{ width: "100%" }}>
         <DataGrid
           autoHeight
-          rows={rows}
+          rows={null}
           columns={columns}
           pageSize={10}
           rowsPerPageOptions={[10]}

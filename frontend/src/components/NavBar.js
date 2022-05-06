@@ -17,6 +17,7 @@ import {
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import SummarizeIcon from "@mui/icons-material/Summarize";
+import FactCheckIcon from "@mui/icons-material/FactCheck";
 
 import LogIn from "./modals/LogIn";
 import SignUp from "./modals/SignUp";
@@ -156,6 +157,17 @@ export default function PrimarySearchAppBar() {
                   <Badge color="error">
                     <ShoppingCartIcon />
                   </Badge>
+                </IconButton>
+              )}
+
+              {currentUser?.is_seller && (
+                <IconButton
+                  size="large"
+                  color="error"
+                  component={RouterLink}
+                  to={`/orders/admin`}
+                >
+                  <FactCheckIcon />
                 </IconButton>
               )}
 

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
 
@@ -12,6 +13,8 @@ import {
 } from "@mui/material";
 
 export default function ProfileEdit() {
+  const navigate = useNavigate();
+
   // products inputs
   const [name, setName] = useState();
   const [description, setDescription] = useState();
@@ -75,6 +78,8 @@ export default function ProfileEdit() {
 
     if (response.status === 201) {
       console.log(response.data);
+      alert("product created succesfully!");
+      navigate("/");
     } else {
       alert("product creation failed");
     }

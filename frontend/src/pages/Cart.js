@@ -57,8 +57,53 @@ export default function Cart() {
     }
   }
 
+  async function createOrder() {
+    console.log(currentUser?.user_id);
+
+    const url = `http://127.0.0.1:8000/api/orders/`;
+    const data = JSON.stringify({ user: currentUser.user_id });
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const response = await axios.post(url, data, config);
+
+    if (response.status === 201) {
+      console.log(response.data);
+      alert("created order");
+    } else {
+      alert("order creation failed");
+    }
+  }
+
+  async function deleteCart() {
+    console.log(currentUser?.user_id);
+    let userId = currentUser?.user_id;
+
+    const url = `http://127.0.0.1:8000/api/cart/delete/${userId}`;
+    const response = await axios.delete(url);
+
+    if (response.status === 204) {
+      console.log(response);
+      alert("cart deleted succesfully");
+    } else {
+      alert("cart deletion failed");
+    }
+  }
+
   function handleCheckOutNow() {
-    // send products to checkout
+    // create order no
+    createOrder();
+
+    // clone cart to orderDetails
+
+    // update product_id stock
+    // for each cart item, go to the product and patch the stock
+
+    // clear cart
+    deleteCart();
   }
 
   return (

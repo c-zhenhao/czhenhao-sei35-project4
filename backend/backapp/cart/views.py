@@ -23,6 +23,18 @@ class CartItemCreateAPIView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def get_cart(self, userId):
+        try:
+            return CartItem.objects.filter(user_id=userId)
+        except CartItem.DoesNotExist:
+            raise Http404
+
+    # delete cart by userId
+    def delete(self, request, userId):
+        cartitem = self.get_cart(userId)
+        cartitem.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class CartItemByUserAPIView(APIView):
 

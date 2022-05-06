@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
 
 import { Container, Typography, Button, Link } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-
-const handleClick = (event, cellValues) => {
-  console.log(`button is clicked`);
-  console.log(cellValues.row);
-};
 
 const handleRowClick = (param, event) => {
   console.log(`row is clicked`);
@@ -19,6 +15,31 @@ const handleCellClick = (param, event) => {
   console.log(`cell is clicked`);
   console.log(param);
 };
+
+async function handleClick(event, cellValues) {
+  console.log(event.target);
+  console.log(cellValues.row.id);
+
+  let completeOrderId = cellValues.row.id;
+
+  const url = `http://127.0.0.1:8000/api/orders/${completeOrderId}`;
+  const data = JSON.stringify({ order_status: "COMPLETED" });
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  const response = await axios.patch(url, data, config);
+
+  if (response.status === 200) {
+    console.log(response.data);
+    alert("order completed!");
+    window.location.reload();
+  } else {
+    alert("complete order failed");
+  }
+}
 
 const columns = [
   { field: "id", headerName: "ID", width: 90 },
@@ -55,19 +76,19 @@ const columns = [
       return (
         <Button
           variant="contained"
-          color="error"
+          color="success"
           onClick={(event) => {
             handleClick(event, cellValues);
           }}
           disabled={
-            status === "Pending"
+            status !== "COMPLETED"
               ? false
-              : status === "Processing"
+              : status === "PROCESSING"
               ? false
               : true
           }
         >
-          Cancel Order
+          Complete Order
         </Button>
       );
     },
@@ -174,7 +195,7 @@ export default function Orders() {
   return (
     <Container>
       <Typography variant="h4" sx={{ mb: 3 }}>
-        My Orders
+        All Orders
       </Typography>
 
       <div style={{ width: "100%" }}>

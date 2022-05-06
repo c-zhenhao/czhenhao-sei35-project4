@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
+
+import axios from "axios";
 
 import { Container, Typography, Button, Link } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+
+import AuthContext from "../context/AuthContext";
 
 const handleClick = (event, cellValues) => {
   console.log(`button is clicked`);
@@ -145,6 +149,31 @@ const order_status_types = [
 ];
 
 export default function Orders() {
+  const [isNotLoading, setIsNotLoading] = useState(false);
+  const [userOrders, setUserOrders] = useState();
+
+  let { currentUser } = useContext(AuthContext);
+
+  async function getAllOrders() {
+    const url = `http://127.0.0.1:8000/api/orders/`;
+    const response = await axios.get(url);
+    console.log(response.data);
+
+    console.log(currentUser?.user_id);
+    let currentUserId = currentUser?.user_id;
+
+    let ordersArr = response.data;
+    let filteredOrderArr = ordersArr.filter((x) => x.user === currentUserId);
+    console.log(filteredOrderArr);
+    setUserOrders(filteredOrderArr);
+
+    setIsNotLoading(true);
+  }
+
+  useEffect(() => {
+    getAllOrders();
+  }, [isNotLoading]);
+
   return (
     <Container>
       <Typography variant="h4" sx={{ mb: 3 }}>
@@ -152,19 +181,21 @@ export default function Orders() {
       </Typography>
 
       <div style={{ width: "100%" }}>
-        <DataGrid
-          autoHeight
-          rows={rows}
-          columns={columns}
-          pageSize={10}
-          rowsPerPageOptions={[10]}
-          disableSelectionOnClick
-          onRowClick={() => {}}
-          onCellClick={() => {}}
-          components={{
-            Toolbar: GridToolbar,
-          }}
-        />
+        {isNotLoading && (
+          <DataGrid
+            autoHeight
+            rows={userOrders}
+            columns={columns}
+            pageSize={10}
+            rowsPerPageOptions={[10]}
+            disableSelectionOnClick
+            onRowClick={() => {}}
+            onCellClick={() => {}}
+            components={{
+              Toolbar: GridToolbar,
+            }}
+          />
+        )}
       </div>
     </Container>
   );
