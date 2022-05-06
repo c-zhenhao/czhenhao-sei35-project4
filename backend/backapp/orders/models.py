@@ -14,7 +14,7 @@ class Order(models.Model):
     order_updated_time = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return "{}-{}-{}-{}".format(self.user, self.order_status, self.order_created_time, self.order_updated_time)
+        return self.user
 
 
 class OrderItem(models.Model):
@@ -25,4 +25,4 @@ class OrderItem(models.Model):
         max_digits=6, decimal_places=2, validators=[MinValueValidator(0)])
 
     def __str__(self):
-        return "{}-{}-{}-{}".format(self.id, self.product, self.quantity, self.price)
+        return self.id

@@ -13,4 +13,4 @@ class CartItem(models.Model):
         max_digits=6, decimal_places=2, validators=[MinValueValidator(0)])
 
     def __str__(self):
-        return "{}-{}-{}-{}-{}".format(self.id, self.user, self.product, self.quantity, self.price)
+        return self.id
