@@ -30,6 +30,11 @@ I wanted to create/replicate an e-commerce app with a [group buy](https://en.wik
 
 - Coding in between frontend (javascript) and backend (python) was very disorientating
 
+## Database Diagram
+
+![image](https://user-images.githubusercontent.com/16322250/180946488-2454e388-931f-4e55-a19b-83fe4c64bc36.png)
+
+
 ## Future roadmap
 
 1. Finish up the full logic of the app (stock status, updates)
